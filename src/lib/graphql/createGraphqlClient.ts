@@ -39,6 +39,7 @@ const createGraphqlClient = () => {
             credentials: 'omit',
             signal: AbortSignal.timeout(10000),
         },
+        preferGetMethod: false,
         requestPolicy: 'network-only',
         url: `https://${host}/graphql`,
     })
