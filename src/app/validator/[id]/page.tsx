@@ -5,8 +5,10 @@ import {
     TransactionTableContainer,
     ValidatorActiveSincePanelContainer,
     ValidatorContainer,
+    ValidatorDelegationFlowContainer,
     ValidatorStatusContainer,
     ValidatorVotingPercentagePanelContainer,
+    ValidatorVotingPowerHistoryContainer,
     ValidatorVotingPowerPanelContainer,
 } from '@/containers'
 import { classNames, generatePageMetadata } from '@/lib/utils'
@@ -69,6 +71,20 @@ const ValidatorPage: FC<Props> = async props => {
                     validatorId={id}
                 />
                 <ValidatorStatusContainer
+                    className={classNames(
+                        'col-span-12 md:col-span-7 md:col-start-6',
+                        'lg:col-span-8! lg:col-start-5!'
+                    )}
+                    validatorId={id}
+                />
+                <ValidatorVotingPowerHistoryContainer
+                    className={classNames(
+                        'col-span-12 md:col-span-7 md:col-start-6',
+                        'lg:col-span-8! lg:col-start-5!'
+                    )}
+                    validatorId={id}
+                />
+                <ValidatorDelegationFlowContainer
                     className={classNames(
                         'col-span-12 md:col-span-7 md:col-start-6',
                         'lg:col-span-8! lg:col-start-5!'

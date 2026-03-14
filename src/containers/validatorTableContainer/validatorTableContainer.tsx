@@ -11,9 +11,14 @@ import ValidatorTableLoader from './validatorTableLoader'
 
 export type Props = Omit<ValidatorTableProps, 'validators'>
 
-const ValidatorTableContainer: FC<Props> = ({ inactive, ...props }) => (
+const ValidatorTableContainer: FC<Props> = ({
+    inactive,
+    sort,
+    sortDir,
+    ...props
+}) => (
     <Suspense
-        key={String(inactive)}
+        key={`${String(inactive)}-${sort}-${sortDir}`}
         fallback={
             <Table {...props}>
                 <thead>
@@ -35,7 +40,12 @@ const ValidatorTableContainer: FC<Props> = ({ inactive, ...props }) => (
             </Table>
         }
     >
-        <ValidatorTableLoader {...props} inactive={inactive} />
+        <ValidatorTableLoader
+            {...props}
+            inactive={inactive}
+            sort={sort}
+            sortDir={sortDir}
+        />
     </Suspense>
 )
 

@@ -17,7 +17,18 @@ const ValidatorTableLoader: FC<Props> = async props => {
         notFound()
     }
 
-    return <ValidatorTable {...props} validators={validators} />
+    return (
+        <ValidatorTable
+            {...props}
+            footer={
+                <span className="text-text-secondary text-sm">
+                    {validators.length} {props.inactive ? 'inactive' : 'active'}{' '}
+                    validators
+                </span>
+            }
+            validators={validators}
+        />
+    )
 }
 
 export default ValidatorTableLoader

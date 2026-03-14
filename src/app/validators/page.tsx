@@ -27,7 +27,7 @@ export const metadata = generatePageMetadata(
 )
 
 interface Props {
-    searchParams: Promise<{ filter?: string }>
+    searchParams: Promise<{ dir?: string; filter?: string; sort?: string }>
 }
 
 const ValidatorsPage: FC<Props> = async props => {
@@ -102,6 +102,8 @@ const ValidatorsPage: FC<Props> = async props => {
                         </div>
                     }
                     inactive={searchParams.filter === 'inactive'}
+                    sort={searchParams.sort as any}
+                    sortDir={searchParams.dir as any}
                 />
             </div>
         </Container>
