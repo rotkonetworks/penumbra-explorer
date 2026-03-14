@@ -115,6 +115,47 @@ type DexStats {
     totalExecutions: Int!
 }
 
+type TradingPairLiquidity {
+    tradingPairAsset1: String!
+    tradingPairAsset2: String!
+    activePositions: Int!
+    totalReserves1: String!
+    totalReserves2: String!
+    avgFeePercentage: Float!
+}
+
+type TradingVolume24h {
+    assetId: String!
+    volume24h: String!
+    swapCount24h: Int!
+    periodStart: DateTime
+    periodEnd: DateTime
+}
+
+type RecentSwapPrice {
+    inputAssetId: String!
+    outputAssetId: String!
+    avgPrice: Float!
+    swapCount: Int!
+    latestSwap: DateTime
+}
+
+type SwapVolumeHistory {
+    date: String!
+    totalVolume: String!
+    swapCount: Int!
+    arbCount: Int!
+    organicCount: Int!
+}
+
+type IbcFlowHistory {
+    date: String!
+    inflowVolume: String!
+    outflowVolume: String!
+    inflowCount: Int!
+    outflowCount: Int!
+}
+
 type Event {
     type: String!
     value: String!
@@ -264,9 +305,14 @@ type QueryRoot {
     dbRawTransaction(txHashHex: String!): DbRawTransaction
     dbRawTransactions(limit: Int, offset: Int): [DbRawTransaction!]!
     dexStats: DexStats!
+    tradingPairLiquidity(limit: Int): [TradingPairLiquidity!]!
+    tradingVolume24h(limit: Int): [TradingVolume24h!]!
+    recentSwapPrices(limit: Int): [RecentSwapPrice!]!
+    swapVolumeHistory(days: Int): [SwapVolumeHistory!]!
     getVoteForTransaction(txHash: String!): VoteForTransaction
     governanceParameters: GovernanceParameters
     ibcStats(clientId: String, limit: Int, offset: Int, timePeriod: TimePeriod): [IbcStats!]!
+    ibcFlowHistory(clientId: String, days: Int): [IbcFlowHistory!]!
     ibcTotalShieldedVolume: TotalShieldedVolume!
     latestExecutions(filter: SwapExecutionFilter): [SwapExecution!]!
     liquidityPositions(filter: LiquidityPositionFilter, limit: CollectionLimit!): LiquidityPositionCollection!
@@ -276,8 +322,14 @@ type QueryRoot {
     stats: Stats!
     transaction(hash: String!): Transaction
     transactions(filter: TransactionFilter, limit: CollectionLimit!): TransactionCollection!
+    validatorDelegates(validatorId: String!, limit: Int, offset: Int): [Delegate!]!
     validatorDetails(id: String!): ValidatorDetails
+    validatorStakingStats(validatorId: String!): ValidatorStakingStats
+    validatorUndelegates(validatorId: String!, limit: Int, offset: Int, pendingOnly: Boolean): [Undelegate!]!
+    validatorVotingPowerHistory(endTime: DateTime, limit: Int, startTime: DateTime, validatorId: String!): [VotingPowerHistoryEntry!]!
     validatorsHomepage(filter: ValidatorFilter): ValidatorHomepageData!
+    pendingUndelegations(limit: Int, offset: Int): [Undelegate!]!
+    undelegationsReleasingSoon(currentHeight: Int!, blocksAhead: Int): [Undelegate!]!
 }
 
 type Root {
@@ -439,6 +491,47 @@ type ValidatorSearchResults {
     total: Int!
 }
 
+type VotingPowerHistoryEntry {
+    blockHeight: Int!
+    timestamp: DateTime!
+    validatorIdentityKey: String!
+    votingPower: Int!
+}
+
+type Delegate {
+    id: Int!
+    txHash: String!
+    validatorIdentityKey: String!
+    delegationAmount: String!
+    unbondedAmount: String!
+    epochIndex: Int!
+    blockHeight: Int!
+    timestamp: DateTime!
+}
+
+type Undelegate {
+    id: Int!
+    txHash: String!
+    validatorIdentityKey: String!
+    delegationAmount: String!
+    unbondedAmount: String!
+    epochIndex: Int!
+    unbondingStartHeight: Int!
+    releaseHeight: Int!
+    blockHeight: Int!
+    timestamp: DateTime!
+    claimed: Boolean!
+}
+
+type ValidatorStakingStats {
+    validatorIdentityKey: String!
+    totalDelegations: String!
+    totalUndelegations: String!
+    pendingUndelegations: String!
+    pendingUndelegateCount: Int!
+    nextReleaseHeight: Int
+}
+
 type Vote {
     effectiveVotingPower: Decimal!
     id: String
@@ -476,6 +569,14 @@ enum ClientStatus {
 }
 
 enum IbcStatus {
+    COMPLETED
+    ERROR
+    EXPIRED
+    PENDING
+    UNKNOWN
+}
+
+enum IbcStatusFilter {
     COMPLETED
     ERROR
     EXPIRED
@@ -573,6 +674,7 @@ input SwapExecutionFilter {
 input TransactionFilter {
     clientId: String
     hash: String
+    ibcStatus: IbcStatusFilter
     validator: String
 }
 

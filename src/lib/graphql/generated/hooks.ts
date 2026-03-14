@@ -219,6 +219,21 @@ export const GovParametersDocument = gql`
 export function useGovParametersQuery(options?: Omit<Urql.UseQueryArgs<Types.GovParametersQueryVariables>, 'query'>) {
   return Urql.useQuery<Types.GovParametersQuery, Types.GovParametersQueryVariables>({ query: Types.GovParametersDocument, ...options });
 };
+export const IbcFlowHistoryDocument = gql`
+    query IbcFlowHistory($clientId: String, $days: Int) {
+  ibcFlowHistory(clientId: $clientId, days: $days) {
+    date
+    inflowVolume
+    outflowVolume
+    inflowCount
+    outflowCount
+  }
+}
+    `;
+
+export function useIbcFlowHistoryQuery(options?: Omit<Urql.UseQueryArgs<Types.IbcFlowHistoryQueryVariables>, 'query'>) {
+  return Urql.useQuery<Types.IbcFlowHistoryQuery, Types.IbcFlowHistoryQueryVariables>({ query: Types.IbcFlowHistoryDocument, ...options });
+};
 export const IbcStatsDocument = gql`
     query IbcStats($clientId: String) {
   ibcStats(clientId: $clientId) {
@@ -293,6 +308,21 @@ export const ProposalDocument = gql`
 export function useProposalQuery(options: Omit<Urql.UseQueryArgs<Types.ProposalQueryVariables>, 'query'>) {
   return Urql.useQuery<Types.ProposalQuery, Types.ProposalQueryVariables>({ query: Types.ProposalDocument, ...options });
 };
+export const RecentSwapPricesDocument = gql`
+    query RecentSwapPrices($limit: Int) {
+  recentSwapPrices(limit: $limit) {
+    inputAssetId
+    outputAssetId
+    avgPrice
+    swapCount
+    latestSwap
+  }
+}
+    `;
+
+export function useRecentSwapPricesQuery(options?: Omit<Urql.UseQueryArgs<Types.RecentSwapPricesQueryVariables>, 'query'>) {
+  return Urql.useQuery<Types.RecentSwapPricesQuery, Types.RecentSwapPricesQueryVariables>({ query: Types.RecentSwapPricesDocument, ...options });
+};
 export const SearchDocument = gql`
     query Search($slug: String!) {
   search(slug: $slug) {
@@ -327,6 +357,21 @@ export const StatsDocument = gql`
 export function useStatsQuery(options?: Omit<Urql.UseQueryArgs<Types.StatsQueryVariables>, 'query'>) {
   return Urql.useQuery<Types.StatsQuery, Types.StatsQueryVariables>({ query: Types.StatsDocument, ...options });
 };
+export const SwapVolumeHistoryDocument = gql`
+    query SwapVolumeHistory($days: Int) {
+  swapVolumeHistory(days: $days) {
+    date
+    totalVolume
+    swapCount
+    arbCount
+    organicCount
+  }
+}
+    `;
+
+export function useSwapVolumeHistoryQuery(options?: Omit<Urql.UseQueryArgs<Types.SwapVolumeHistoryQueryVariables>, 'query'>) {
+  return Urql.useQuery<Types.SwapVolumeHistoryQuery, Types.SwapVolumeHistoryQueryVariables>({ query: Types.SwapVolumeHistoryDocument, ...options });
+};
 export const TotalShieldedVolumeDocument = gql`
     query TotalShieldedVolume {
   ibcTotalShieldedVolume {
@@ -337,6 +382,37 @@ export const TotalShieldedVolumeDocument = gql`
 
 export function useTotalShieldedVolumeQuery(options?: Omit<Urql.UseQueryArgs<Types.TotalShieldedVolumeQueryVariables>, 'query'>) {
   return Urql.useQuery<Types.TotalShieldedVolumeQuery, Types.TotalShieldedVolumeQueryVariables>({ query: Types.TotalShieldedVolumeDocument, ...options });
+};
+export const TradingPairLiquidityDocument = gql`
+    query TradingPairLiquidity($limit: Int) {
+  tradingPairLiquidity(limit: $limit) {
+    tradingPairAsset1
+    tradingPairAsset2
+    activePositions
+    totalReserves1
+    totalReserves2
+    avgFeePercentage
+  }
+}
+    `;
+
+export function useTradingPairLiquidityQuery(options?: Omit<Urql.UseQueryArgs<Types.TradingPairLiquidityQueryVariables>, 'query'>) {
+  return Urql.useQuery<Types.TradingPairLiquidityQuery, Types.TradingPairLiquidityQueryVariables>({ query: Types.TradingPairLiquidityDocument, ...options });
+};
+export const TradingVolume24hDocument = gql`
+    query TradingVolume24h($limit: Int) {
+  tradingVolume24h(limit: $limit) {
+    assetId
+    volume24h
+    swapCount24h
+    periodStart
+    periodEnd
+  }
+}
+    `;
+
+export function useTradingVolume24hQuery(options?: Omit<Urql.UseQueryArgs<Types.TradingVolume24hQueryVariables>, 'query'>) {
+  return Urql.useQuery<Types.TradingVolume24hQuery, Types.TradingVolume24hQueryVariables>({ query: Types.TradingVolume24hDocument, ...options });
 };
 export const TransactionDocument = gql`
     query Transaction($hash: String!) {
@@ -389,6 +465,24 @@ export const ValidatorBlocksDocument = gql`
 export function useValidatorBlocksQuery(options: Omit<Urql.UseQueryArgs<Types.ValidatorBlocksQueryVariables>, 'query'>) {
   return Urql.useQuery<Types.ValidatorBlocksQuery, Types.ValidatorBlocksQueryVariables>({ query: Types.ValidatorBlocksDocument, ...options });
 };
+export const ValidatorDelegatesDocument = gql`
+    query ValidatorDelegates($validatorId: String!, $limit: Int, $offset: Int) {
+  validatorDelegates(validatorId: $validatorId, limit: $limit, offset: $offset) {
+    id
+    txHash
+    validatorIdentityKey
+    delegationAmount
+    unbondedAmount
+    epochIndex
+    blockHeight
+    timestamp
+  }
+}
+    `;
+
+export function useValidatorDelegatesQuery(options: Omit<Urql.UseQueryArgs<Types.ValidatorDelegatesQueryVariables>, 'query'>) {
+  return Urql.useQuery<Types.ValidatorDelegatesQuery, Types.ValidatorDelegatesQueryVariables>({ query: Types.ValidatorDelegatesDocument, ...options });
+};
 export const ValidatorParametersDocument = gql`
     query ValidatorParameters {
   validatorsHomepage {
@@ -432,6 +526,48 @@ export const ValidatorDocument = gql`
 export function useValidatorQuery(options: Omit<Urql.UseQueryArgs<Types.ValidatorQueryVariables>, 'query'>) {
   return Urql.useQuery<Types.ValidatorQuery, Types.ValidatorQueryVariables>({ query: Types.ValidatorDocument, ...options });
 };
+export const ValidatorStakingStatsDocument = gql`
+    query ValidatorStakingStats($validatorId: String!) {
+  validatorStakingStats(validatorId: $validatorId) {
+    validatorIdentityKey
+    totalDelegations
+    totalUndelegations
+    pendingUndelegations
+    pendingUndelegateCount
+    nextReleaseHeight
+  }
+}
+    `;
+
+export function useValidatorStakingStatsQuery(options: Omit<Urql.UseQueryArgs<Types.ValidatorStakingStatsQueryVariables>, 'query'>) {
+  return Urql.useQuery<Types.ValidatorStakingStatsQuery, Types.ValidatorStakingStatsQueryVariables>({ query: Types.ValidatorStakingStatsDocument, ...options });
+};
+export const ValidatorUndelegatesDocument = gql`
+    query ValidatorUndelegates($validatorId: String!, $limit: Int, $offset: Int, $pendingOnly: Boolean) {
+  validatorUndelegates(
+    validatorId: $validatorId
+    limit: $limit
+    offset: $offset
+    pendingOnly: $pendingOnly
+  ) {
+    id
+    txHash
+    validatorIdentityKey
+    delegationAmount
+    unbondedAmount
+    epochIndex
+    unbondingStartHeight
+    releaseHeight
+    blockHeight
+    timestamp
+    claimed
+  }
+}
+    `;
+
+export function useValidatorUndelegatesQuery(options: Omit<Urql.UseQueryArgs<Types.ValidatorUndelegatesQueryVariables>, 'query'>) {
+  return Urql.useQuery<Types.ValidatorUndelegatesQuery, Types.ValidatorUndelegatesQueryVariables>({ query: Types.ValidatorUndelegatesDocument, ...options });
+};
 export const ValidatorVotingPercentageDocument = gql`
     query ValidatorVotingPercentage($id: String!) {
   validatorDetails(id: $id) {
@@ -442,6 +578,25 @@ export const ValidatorVotingPercentageDocument = gql`
 
 export function useValidatorVotingPercentageQuery(options: Omit<Urql.UseQueryArgs<Types.ValidatorVotingPercentageQueryVariables>, 'query'>) {
   return Urql.useQuery<Types.ValidatorVotingPercentageQuery, Types.ValidatorVotingPercentageQueryVariables>({ query: Types.ValidatorVotingPercentageDocument, ...options });
+};
+export const ValidatorVotingPowerHistoryDocument = gql`
+    query ValidatorVotingPowerHistory($validatorId: String!, $startTime: DateTime, $endTime: DateTime, $limit: Int) {
+  validatorVotingPowerHistory(
+    validatorId: $validatorId
+    startTime: $startTime
+    endTime: $endTime
+    limit: $limit
+  ) {
+    validatorIdentityKey
+    votingPower
+    blockHeight
+    timestamp
+  }
+}
+    `;
+
+export function useValidatorVotingPowerHistoryQuery(options: Omit<Urql.UseQueryArgs<Types.ValidatorVotingPowerHistoryQueryVariables>, 'query'>) {
+  return Urql.useQuery<Types.ValidatorVotingPowerHistoryQuery, Types.ValidatorVotingPowerHistoryQueryVariables>({ query: Types.ValidatorVotingPowerHistoryDocument, ...options });
 };
 export const ValidatorVotingPowerDocument = gql`
     query ValidatorVotingPower($id: String!) {

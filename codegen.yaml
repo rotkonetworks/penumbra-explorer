@@ -1,5 +1,5 @@
 overwrite: true
-schema: https://${NEXT_PUBLIC_GRAPHQL_HOST}/graphql
+schema: src/lib/graphql/schema.graphql
 config:
   # https://www.graphql-code-generator.com/docs/config-reference/naming-convention#remove-underscores
   namingConvention:
