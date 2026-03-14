@@ -4,7 +4,7 @@
 import { FC, useEffect, useRef, useState } from 'react'
 import { useClient } from 'urql'
 import { pipe, subscribe } from 'wonka'
-import { BlockTable, Pagination } from '@/components'
+import { BlockTable, Pagination, ResultCount } from '@/components'
 import { animationFrameMs } from '@/lib/constants'
 import dayjs from '@/lib/dayjs'
 import {
@@ -97,16 +97,23 @@ const BlockTableUpdater: FC<Props> = ({
         }
     }, [])
 
+    const page = (limit.offset ?? 0) / limit.length + 1
+    const totalPages = Math.ceil(total / limit.length)
+
     return (
         <BlockTable
             {...props}
             blocks={blocks}
             footer={
                 pagination ? (
-                    <Pagination
-                        page={(limit.offset ?? 0) / limit.length + 1}
-                        totalPages={Math.ceil(total / limit.length)}
-                    />
+                    <div className="flex flex-col items-center gap-2">
+                        <Pagination page={page} totalPages={totalPages} />
+                        <ResultCount
+                            length={blocks.length}
+                            offset={limit.offset}
+                            total={total}
+                        />
+                    </div>
                 ) : undefined
             }
         />

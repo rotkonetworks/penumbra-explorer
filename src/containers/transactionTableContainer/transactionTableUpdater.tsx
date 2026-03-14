@@ -4,7 +4,7 @@
 import { FC, useEffect, useRef, useState } from 'react'
 import { useClient } from 'urql'
 import { pipe, subscribe } from 'wonka'
-import { Pagination, TransactionTable } from '@/components'
+import { Pagination, ResultCount, TransactionTable } from '@/components'
 import { animationFrameMs } from '@/lib/constants'
 import {
     IbcStatus,
@@ -123,15 +123,22 @@ const TransactionTableUpdater: FC<Props> = ({
         }
     }, [])
 
+    const page = (limit.offset ?? 0) / limit.length + 1
+    const totalPages = Math.ceil(total / limit.length)
+
     return (
         <TransactionTable
             {...props}
             footer={
                 pagination ? (
-                    <Pagination
-                        page={(limit.offset ?? 0) / limit.length + 1}
-                        totalPages={Math.ceil(total / limit.length)}
-                    />
+                    <div className="flex flex-col items-center gap-2">
+                        <Pagination page={page} totalPages={totalPages} />
+                        <ResultCount
+                            length={transactions.length}
+                            offset={limit.offset}
+                            total={total}
+                        />
+                    </div>
                 ) : undefined
             }
             transactions={transactions}

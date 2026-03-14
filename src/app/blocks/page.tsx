@@ -34,7 +34,11 @@ const BlocksPage: FC<Props> = async props => {
                 <Breadcrumb href="/">Explore</Breadcrumb>
                 <Breadcrumb>Blocks</Breadcrumb>
             </Breadcrumbs>
-            <BlockTableContainer limit={{ length, offset }} pagination />
+            <BlockTableContainer
+                header={<h1 className="text-2xl font-medium">Blocks</h1>}
+                limit={{ length, offset }}
+                pagination
+            />
         </Container>
     )
 }
