@@ -6,12 +6,16 @@ import {
     Breadcrumbs,
     Container,
     FilterSelector,
+    TimeRangeSelector,
 } from '@/components'
 import {
     DexExecutionContainer,
     DexExecutionPanelContainer,
+    DexMarketOverviewContainer,
     DexPositionPanelContainer,
     DexPositionTableContainer,
+    DexPriceTableContainer,
+    DexVolumeHistoryContainer,
 } from '@/containers'
 import { LiquidityPositionStateFilter } from '@/lib/graphql/generated/types'
 import { generatePageMetadata } from '@/lib/utils'
@@ -29,6 +33,7 @@ interface Props {
     searchParams: Promise<{
         filter?: string
         page?: string
+        range?: string
     }>
 }
 
@@ -52,6 +57,34 @@ const DexPage: FC<Props> = async props => {
             <div className="flex flex-col gap-4 sm:flex-row">
                 <DexExecutionPanelContainer className="flex-1" />
                 <DexPositionPanelContainer className="flex-1" />
+            </div>
+            <DexVolumeHistoryContainer
+                className="mt-4"
+                days={
+                    searchParams.range === '7'
+                        ? 7
+                        : searchParams.range === '90'
+                          ? 90
+                          : searchParams.range === '365'
+                            ? 365
+                            : 30
+                }
+                timeRangeSelector={
+                    <TimeRangeSelector
+                        paramName="range"
+                        ranges={[
+                            { label: '30d', value: '30' },
+                            { label: '7d', value: '7' },
+                            { label: '90d', value: '90' },
+                            { label: '1y', value: '365' },
+                        ]}
+                        selectedRange={searchParams.range || '30'}
+                    />
+                }
+            />
+            <div className="mt-4 grid gap-4 lg:grid-cols-2">
+                <DexMarketOverviewContainer />
+                <DexPriceTableContainer />
             </div>
             <div className="mt-4 flex flex-col-reverse gap-4 lg:flex-row">
                 <DexExecutionContainer />
