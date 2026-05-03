@@ -1,30 +1,24 @@
 import { UmPriceData } from '@/lib/types'
 
-const searchParams = new URLSearchParams({
-    ids: 'penumbra',
-    vs_currency: 'usd',
-})
-
-const url = `https://api.coingecko.com/api/v3/coins/markets?${searchParams}`
+// Use our own /api/um-price proxy instead of hitting CoinGecko directly.
+// CoinGecko's free tier doesn't send CORS headers, so a browser fetch
+// against api.coingecko.com fails. The route at /api/um-price proxies
+// the call server-side and is cached for ~60s.
+const url = '/api/um-price'
 
 interface Data {
-    current_price: number
-    price_change_percentage_24h: number
+    price: number
+    change: number
 }
 
 const getUmPrice = async (): Promise<UmPriceData | undefined> => {
     try {
-        const response: Data[] = await fetch(url).then(res => res.json())
-
-        if (!response.length) {
-            return
-        }
-
-        const [data] = response
-
+        const response = await fetch(url)
+        if (!response.ok) return
+        const data = (await response.json()) as Data
         return {
-            change: data.price_change_percentage_24h,
-            price: data.current_price,
+            change: data.change,
+            price: data.price,
         }
     } catch (e) {
         console.error(e)
